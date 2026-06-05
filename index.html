@@ -1,275 +1,287 @@
-
-<h2 class="sr-only">My Moissanite operations dashboard prototype with inventory, customers, and shipment tracking modules</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Moissanite — Ops Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans)}
-.nav{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
-.nav-btn{padding:8px 16px;font-size:13px;font-weight:500;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--color-text-secondary);margin-bottom:-1px}
-.nav-btn.active{border-bottom:2px solid var(--color-text-primary);color:var(--color-text-primary)}
-.section{display:none}.section.active{display:block}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:12px}
-.badge{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:var(--border-radius-md)}
-.badge-ok{background:var(--color-background-success);color:var(--color-text-success)}
-.badge-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
-.badge-danger{background:var(--color-background-danger);color:var(--color-text-danger)}
-.badge-info{background:var(--color-background-info);color:var(--color-text-info)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;font-weight:500;font-size:12px;color:var(--color-text-secondary);padding:0 8px 8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
-td{padding:10px 8px 10px 0;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-.alert-row td{background:var(--color-background-danger)}
-.detail-panel{display:none;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;margin-top:8px;font-size:13px}
-.detail-panel.open{display:block}
-.link-btn{background:transparent;border:none;color:var(--color-text-info);cursor:pointer;font-size:13px;text-decoration:underline;padding:0}
-.row-btn{background:transparent;border:none;cursor:pointer;font-size:13px;color:var(--color-text-secondary);padding:2px 6px;border-radius:4px}
-.row-btn:hover{background:var(--color-background-secondary)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8f8f6;color:#1a1a18;font-size:15px;padding:24px}
+.container{max-width:860px;margin:0 auto}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.header-title{font-size:20px;font-weight:500}
+.header-sub{font-size:13px;color:#888;margin-top:2px}
 .metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
-.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
-.metric-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
-.metric-value{font-size:22px;font-weight:500;color:var(--color-text-primary)}
-.section-title{font-size:15px;font-weight:500;margin-bottom:1rem;color:var(--color-text-primary)}
-.tag-api{font-size:10px;background:#E6F1FB;color:#185FA5;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:500}
+.metric{background:#fff;border:0.5px solid #e0e0d8;border-radius:10px;padding:14px 16px}
+.metric-label{font-size:12px;color:#888;margin-bottom:4px}
+.metric-value{font-size:24px;font-weight:500}
+.metric-value.alert{color:#c0392b}
+.nav{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:1px solid #e0e0d8}
+.nav-btn{padding:9px 18px;font-size:13px;font-weight:500;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;color:#888;margin-bottom:-1px;display:flex;align-items:center;gap:6px}
+.nav-btn.active{border-bottom:2px solid #1a1a18;color:#1a1a18}
+.nav-btn:hover{color:#1a1a18}
+.section{display:none}.section.active{display:block}
+.section-title{font-size:15px;font-weight:500;margin-bottom:1rem}
+.card{background:#fff;border:0.5px solid #e0e0d8;border-radius:10px;padding:1rem 1.25rem;margin-bottom:10px}
+.card-clickable{cursor:pointer;transition:border-color .15s}
+.card-clickable:hover{border-color:#aaa}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:500;font-size:12px;color:#888;padding:0 8px 8px 0;border-bottom:0.5px solid #e0e0d8}
+td{padding:10px 8px 10px 0;border-bottom:0.5px solid #e0e0d8;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.alert-row td{background:#fff5f5}
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 8px;border-radius:6px}
+.badge-ok{background:#eafaf1;color:#1e7e4a}
+.badge-warn{background:#fef9e7;color:#9a6f00}
+.badge-danger{background:#fdecea;color:#c0392b}
+.badge-info{background:#eaf4fe;color:#1a6db5}
+.detail-panel{display:none;background:#f8f8f6;border-radius:8px;padding:10px 12px;margin-top:4px;font-size:13px;color:#555;line-height:1.5}
+.detail-panel.open{display:block}
+.link-btn{background:transparent;border:none;color:#1a6db5;cursor:pointer;font-size:13px;text-decoration:underline;padding:0}
+.row-btn{background:transparent;border:none;cursor:pointer;font-size:13px;color:#aaa;padding:2px 6px;border-radius:4px}
+.row-btn:hover{background:#f0f0ec}
+.back-btn{background:transparent;border:none;cursor:pointer;font-size:13px;color:#888;margin-bottom:1rem;display:flex;align-items:center;gap:4px}
+.back-btn:hover{color:#1a1a18}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.avatar-blue{background:#eaf4fe;color:#1a6db5}
+.avatar-green{background:#eafaf1;color:#1e7e4a}
+.mono{font-family:monospace;font-size:12px}
+.note-box{margin-top:1rem;padding:12px;background:#fef9e7;border-radius:8px;font-size:13px;color:#9a6f00;line-height:1.5}
+.info-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px}
+.info-label{color:#888;width:90px;flex-shrink:0}
+.order-history-title{font-size:13px;font-weight:500;margin:1rem 0 8px}
+.supplier-notes{font-size:12px;color:#888;background:#f8f8f6;padding:8px 10px;border-radius:6px;margin-bottom:1rem;line-height:1.5}
 </style>
+</head>
+<body>
+<div class="container">
 
-<div style="padding:1rem 0">
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+<div class="header">
   <div>
-    <div style="font-size:18px;font-weight:500;color:var(--color-text-primary)">Operations Dashboard</div>
-    <div style="font-size:13px;color:var(--color-text-secondary);margin-top:2px">My Moissanite — prototype v0.1</div>
+    <div class="header-title">Operations Dashboard</div>
+    <div class="header-sub">My Moissanite — prototype v0.1</div>
   </div>
-  <div style="font-size:12px;color:var(--color-text-secondary)">June 2026</div>
+  <div style="font-size:12px;color:#aaa">June 2026</div>
 </div>
 
 <div class="metric-grid">
   <div class="metric"><div class="metric-label">SKUs in stock</div><div class="metric-value">24</div></div>
   <div class="metric"><div class="metric-label">Active shipments</div><div class="metric-value">8</div></div>
-  <div class="metric"><div class="metric-label">Alerts</div><div class="metric-value" style="color:var(--color-text-danger)">2</div></div>
+  <div class="metric"><div class="metric-label">Alerts</div><div class="metric-value alert">2</div></div>
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="showTab('inventory')"><i class="ti ti-box" aria-hidden="true"></i> Inventory</button>
-  <button class="nav-btn" onclick="showTab('suppliers')"><i class="ti ti-building-store" aria-hidden="true"></i> Suppliers</button>
-  <button class="nav-btn" onclick="showTab('customers')"><i class="ti ti-users" aria-hidden="true"></i> Customers</button>
-  <button class="nav-btn" onclick="showTab('shipments')"><i class="ti ti-truck" aria-hidden="true"></i> Shipments</button>
+  <button class="nav-btn active" onclick="showTab('inventory',this)"><i class="ti ti-box"></i> Inventory</button>
+  <button class="nav-btn" onclick="showTab('suppliers',this)"><i class="ti ti-building-store"></i> Suppliers</button>
+  <button class="nav-btn" onclick="showTab('customers',this)"><i class="ti ti-users"></i> Customers</button>
+  <button class="nav-btn" onclick="showTab('shipments',this)"><i class="ti ti-truck"></i> Shipments</button>
 </div>
 
+<!-- INVENTORY -->
 <div id="inventory" class="section active">
   <div class="section-title">Stock inventory</div>
   <table>
-    <thead><tr>
-      <th>SKU</th><th>Product</th><th>Location</th><th>Stock</th><th>Min</th><th>Supplier</th><th></th>
-    </tr></thead>
+    <thead><tr><th>SKU</th><th>Product</th><th>Location</th><th>Stock</th><th>Min</th><th>Supplier</th><th></th></tr></thead>
     <tbody>
       <tr>
-        <td><span style="font-family:var(--font-mono);font-size:12px">MM-RING-001</span></td>
+        <td class="mono">MM-RING-001</td>
         <td>Solitaire ring 1ct 18K gold</td>
         <td>Shelf A2</td>
         <td><span class="badge badge-ok">12</span></td>
-        <td style="color:var(--color-text-secondary)">3</td>
-        <td><button class="link-btn" onclick="openSupplier('lotus')">Lotus Gems</button></td>
-        <td><button class="row-btn" onclick="toggleDetail('inv1')"><i class="ti ti-chevron-down" aria-hidden="true"></i></button></td>
+        <td style="color:#aaa">3</td>
+        <td><button class="link-btn" onclick="openSupplierById('lotus')">Lotus Gems</button></td>
+        <td><button class="row-btn" onclick="toggleDetail('inv1')"><i class="ti ti-chevron-down"></i></button></td>
       </tr>
-      <tr><td colspan="7" style="padding:0"><div class="detail-panel" id="inv1">
-        <strong>Notes:</strong> Bestseller. Reorder lead time ~14 days. Last restocked 15 May 2026.
-      </div></td></tr>
+      <tr><td colspan="7" style="padding:0 0 6px 0"><div class="detail-panel" id="inv1">Bestseller. Reorder lead time ~14 days. Last restocked 15 May 2026.</div></td></tr>
       <tr>
-        <td><span style="font-family:var(--font-mono);font-size:12px">MM-EAR-004</span></td>
+        <td class="mono">MM-EAR-004</td>
         <td>Stud earrings 0.5ct silver</td>
         <td>Shelf B1</td>
         <td><span class="badge badge-warn">2</span></td>
-        <td style="color:var(--color-text-secondary)">3</td>
-        <td><button class="link-btn" onclick="openSupplier('lotus')">Lotus Gems</button></td>
-        <td><button class="row-btn" onclick="toggleDetail('inv2')"><i class="ti ti-chevron-down" aria-hidden="true"></i></button></td>
+        <td style="color:#aaa">3</td>
+        <td><button class="link-btn" onclick="openSupplierById('lotus')">Lotus Gems</button></td>
+        <td><button class="row-btn" onclick="toggleDetail('inv2')"><i class="ti ti-chevron-down"></i></button></td>
       </tr>
-      <tr><td colspan="7" style="padding:0"><div class="detail-panel" id="inv2">
-        <strong>⚠ Below minimum stock.</strong> Reorder immediately. Last order: 22 April 2026, 10 units.
-      </div></td></tr>
+      <tr><td colspan="7" style="padding:0 0 6px 0"><div class="detail-panel" id="inv2">⚠ Below minimum stock. Reorder immediately. Last order: 22 April 2026, 10 units.</div></td></tr>
       <tr>
-        <td><span style="font-family:var(--font-mono);font-size:12px">MM-NECK-007</span></td>
+        <td class="mono">MM-NECK-007</td>
         <td>Pendant necklace 1ct platinum</td>
         <td>Shelf A3</td>
         <td><span class="badge badge-ok">7</span></td>
-        <td style="color:var(--color-text-secondary)">3</td>
-        <td><button class="link-btn" onclick="openSupplier('starlight')">Starlight Co.</button></td>
-        <td><button class="row-btn" onclick="toggleDetail('inv3')"><i class="ti ti-chevron-down" aria-hidden="true"></i></button></td>
+        <td style="color:#aaa">3</td>
+        <td><button class="link-btn" onclick="openSupplierById('starlight')">Starlight Co.</button></td>
+        <td><button class="row-btn" onclick="toggleDetail('inv3')"><i class="ti ti-chevron-down"></i></button></td>
       </tr>
-      <tr><td colspan="7" style="padding:0"><div class="detail-panel" id="inv3">
-        High-margin item. Custom packaging required. Lead time 21 days.
-      </div></td></tr>
+      <tr><td colspan="7" style="padding:0 0 6px 0"><div class="detail-panel" id="inv3">High-margin item. Custom packaging required. Lead time 21 days.</div></td></tr>
       <tr>
-        <td><span style="font-family:var(--font-mono);font-size:12px">MM-PACK-BOX</span></td>
+        <td class="mono">MM-PACK-BOX</td>
         <td>Gift box (black, size M)</td>
         <td>Storage room</td>
         <td><span class="badge badge-danger">1</span></td>
-        <td style="color:var(--color-text-secondary)">10</td>
-        <td><button class="link-btn" onclick="openSupplier('packpro')">PackPro Spain</button></td>
-        <td><button class="row-btn" onclick="toggleDetail('inv4')"><i class="ti ti-chevron-down" aria-hidden="true"></i></button></td>
+        <td style="color:#aaa">10</td>
+        <td><button class="link-btn" onclick="openSupplierById('packpro')">PackPro Spain</button></td>
+        <td><button class="row-btn" onclick="toggleDetail('inv4')"><i class="ti ti-chevron-down"></i></button></td>
       </tr>
-      <tr><td colspan="7" style="padding:0"><div class="detail-panel" id="inv4">
-        <strong>🔴 Critical — reorder urgently.</strong> Used in 90% of orders. Supplier delivery 3–5 days.
-      </div></td></tr>
+      <tr><td colspan="7" style="padding:0 0 6px 0"><div class="detail-panel" id="inv4">🔴 Critical — reorder urgently. Used in 90% of orders. Supplier delivery 3–5 days.</div></td></tr>
     </tbody>
   </table>
 </div>
 
+<!-- SUPPLIERS -->
 <div id="suppliers" class="section">
-  <div class="section-title">Suppliers</div>
   <div id="supplier-list">
-    <div class="card" style="cursor:pointer" onclick="openSupplierCard('lotus')">
+    <div class="section-title">Suppliers</div>
+    <div class="card card-clickable" onclick="openSupplierCard('lotus')">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div><span style="font-weight:500">Lotus Gems</span><span style="font-size:12px;color:var(--color-text-secondary);margin-left:8px">jewelry manufacturer</span></div>
+        <div><span style="font-weight:500">Lotus Gems</span><span style="font-size:12px;color:#aaa;margin-left:8px">jewelry manufacturer</span></div>
         <span class="badge badge-ok">Active</span>
       </div>
-      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:4px">3 SKUs · Last order: 15 May 2026</div>
+      <div style="font-size:12px;color:#aaa;margin-top:4px">3 SKUs · Last order: 15 May 2026</div>
     </div>
-    <div class="card" style="cursor:pointer" onclick="openSupplierCard('starlight')">
+    <div class="card card-clickable" onclick="openSupplierCard('starlight')">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div><span style="font-weight:500">Starlight Co.</span><span style="font-size:12px;color:var(--color-text-secondary);margin-left:8px">jewelry manufacturer</span></div>
+        <div><span style="font-weight:500">Starlight Co.</span><span style="font-size:12px;color:#aaa;margin-left:8px">jewelry manufacturer</span></div>
         <span class="badge badge-ok">Active</span>
       </div>
-      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:4px">1 SKU · Last order: 3 April 2026</div>
+      <div style="font-size:12px;color:#aaa;margin-top:4px">1 SKU · Last order: 3 April 2026</div>
     </div>
-    <div class="card" style="cursor:pointer" onclick="openSupplierCard('packpro')">
+    <div class="card card-clickable" onclick="openSupplierCard('packpro')">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div><span style="font-weight:500">PackPro Spain</span><span style="font-size:12px;color:var(--color-text-secondary);margin-left:8px">packaging</span></div>
+        <div><span style="font-weight:500">PackPro Spain</span><span style="font-size:12px;color:#aaa;margin-left:8px">packaging</span></div>
         <span class="badge badge-warn">Low stock</span>
       </div>
-      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:4px">1 SKU · Last order: 1 March 2026</div>
+      <div style="font-size:12px;color:#aaa;margin-top:4px">1 SKU · Last order: 1 March 2026</div>
     </div>
   </div>
   <div id="supplier-detail" style="display:none">
-    <button onclick="closeSupplierCard()" style="background:transparent;border:none;cursor:pointer;font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem;display:flex;align-items:center;gap:4px"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back to suppliers</button>
+    <button class="back-btn" onclick="closeSupplierCard()"><i class="ti ti-arrow-left"></i> Back to suppliers</button>
     <div class="card" id="supplier-card-content"></div>
   </div>
 </div>
 
+<!-- CUSTOMERS -->
 <div id="customers" class="section">
-  <div class="section-title">Customers</div>
   <div id="customer-list">
-    <div class="card" style="cursor:pointer" onclick="openCustomer('ana')">
+    <div class="section-title">Customers</div>
+    <div class="card card-clickable" onclick="openCustomer('ana')">
       <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--color-background-info);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--color-text-info)">AG</div>
+        <div class="avatar avatar-blue">AG</div>
         <div>
           <div style="font-weight:500;font-size:14px">Ana García</div>
-          <div style="font-size:12px;color:var(--color-text-secondary)">ana.garcia@email.com · Madrid</div>
+          <div style="font-size:12px;color:#aaa">ana.garcia@email.com · Madrid</div>
         </div>
         <div style="margin-left:auto;text-align:right">
           <div style="font-size:13px;font-weight:500">3 orders</div>
-          <div style="font-size:12px;color:var(--color-text-secondary)">€847 total</div>
+          <div style="font-size:12px;color:#aaa">€847 total</div>
         </div>
       </div>
     </div>
-    <div class="card" style="cursor:pointer" onclick="openCustomer('james')">
+    <div class="card card-clickable" onclick="openCustomer('james')">
       <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--color-background-success);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--color-text-success)">JW</div>
+        <div class="avatar avatar-green">JW</div>
         <div>
           <div style="font-weight:500;font-size:14px">James Wilson</div>
-          <div style="font-size:12px;color:var(--color-text-secondary)">j.wilson@email.com · London</div>
+          <div style="font-size:12px;color:#aaa">j.wilson@email.com · London</div>
         </div>
         <div style="margin-left:auto;text-align:right">
           <div style="font-size:13px;font-weight:500">1 order</div>
-          <div style="font-size:12px;color:var(--color-text-secondary)">€299 total</div>
+          <div style="font-size:12px;color:#aaa">€299 total</div>
         </div>
       </div>
     </div>
   </div>
   <div id="customer-detail" style="display:none">
-    <button onclick="closeCustomer()" style="background:transparent;border:none;cursor:pointer;font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem;display:flex;align-items:center;gap:4px"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <button class="back-btn" onclick="closeCustomer()"><i class="ti ti-arrow-left"></i> Back</button>
     <div id="customer-card-content"></div>
   </div>
 </div>
 
+<!-- SHIPMENTS -->
 <div id="shipments" class="section">
-  <div class="section-title">Active shipments <span style="font-size:12px;color:var(--color-text-danger);margin-left:8px">2 alerts</span></div>
+  <div class="section-title">Active shipments <span style="font-size:12px;color:#c0392b;margin-left:8px">2 alerts</span></div>
   <table>
-    <thead><tr>
-      <th>Order</th><th>Customer</th><th>Carrier</th><th>Status</th><th>Est. delivery</th><th></th>
-    </tr></thead>
+    <thead><tr><th>Order</th><th>Customer</th><th>Carrier</th><th>Status</th><th>Est. delivery</th><th></th></tr></thead>
     <tbody>
       <tr>
-        <td><span style="font-family:var(--font-mono);font-size:12px">#1042</span></td>
+        <td class="mono">#1042</td>
         <td>Ana García</td>
-        <td><button class="link-btn" onclick="openLink('https://www.dhl.com/es-es/home/tracking.html')">DHL <i class="ti ti-external-link" style="font-size:11px" aria-hidden="true"></i></button></td>
+        <td><a href="https://www.dhl.com/es-es/home/tracking.html" target="_blank" style="color:#1a6db5;font-size:13px">DHL <i class="ti ti-external-link" style="font-size:11px"></i></a></td>
         <td><span class="badge badge-ok">In transit</span></td>
         <td>6 Jun 2026</td>
         <td></td>
       </tr>
       <tr class="alert-row">
-        <td><span style="font-family:var(--font-mono);font-size:12px">#1038</span></td>
+        <td class="mono">#1038</td>
         <td>James Wilson</td>
-        <td><button class="link-btn" onclick="openLink('https://www.dhl.com/gb-en/home/tracking.html')">DHL <i class="ti ti-external-link" style="font-size:11px" aria-hidden="true"></i></button></td>
+        <td><a href="https://www.dhl.com/gb-en/home/tracking.html" target="_blank" style="color:#1a6db5;font-size:13px">DHL <i class="ti ti-external-link" style="font-size:11px"></i></a></td>
         <td><span class="badge badge-danger">🔴 Delayed</span></td>
-        <td style="color:var(--color-text-danger);font-weight:500">2 Jun 2026 ← overdue</td>
-        <td><button class="row-btn" onclick="toggleDetail('ship38')"><i class="ti ti-chevron-down" aria-hidden="true"></i></button></td>
+        <td style="color:#c0392b;font-weight:500">2 Jun 2026 ← overdue</td>
+        <td><button class="row-btn" onclick="toggleDetail('ship38')"><i class="ti ti-chevron-down"></i></button></td>
       </tr>
-      <tr><td colspan="6" style="padding:0"><div class="detail-panel" id="ship38">
-        <strong>Action needed:</strong> Shipment stuck at UK customs since 1 Jun. Contact DHL and notify customer. Consider resend if no update by 7 Jun.
-      </div></td></tr>
+      <tr class="alert-row"><td colspan="6" style="padding:0 0 6px 0"><div class="detail-panel" id="ship38"><strong>Action needed:</strong> Shipment stuck at UK customs since 1 Jun. Contact DHL and notify customer. Consider resend if no update by 7 Jun.</div></td></tr>
       <tr class="alert-row">
-        <td><span style="font-family:var(--font-mono);font-size:12px">#1031</span></td>
+        <td class="mono">#1031</td>
         <td>Sophie Müller</td>
-        <td><button class="link-btn" onclick="openLink('https://www.dhl.com/de-de/home/tracking.html')">DHL <i class="ti ti-external-link" style="font-size:11px" aria-hidden="true"></i></button></td>
+        <td><a href="https://www.dhl.com/de-de/home/tracking.html" target="_blank" style="color:#1a6db5;font-size:13px">DHL <i class="ti ti-external-link" style="font-size:11px"></i></a></td>
         <td><span class="badge badge-danger">🔴 No update</span></td>
-        <td style="color:var(--color-text-danger);font-weight:500">31 May 2026 ← overdue</td>
-        <td><button class="row-btn" onclick="toggleDetail('ship31')"><i class="ti ti-chevron-down" aria-hidden="true"></i></button></td>
+        <td style="color:#c0392b;font-weight:500">31 May 2026 ← overdue</td>
+        <td><button class="row-btn" onclick="toggleDetail('ship31')"><i class="ti ti-chevron-down"></i></button></td>
       </tr>
-      <tr><td colspan="6" style="padding:0"><div class="detail-panel" id="ship31">
-        <strong>Action needed:</strong> No tracking update in 5 days. Escalate to DHL Germany. Customer has not yet contacted us.
-      </div></td></tr>
+      <tr class="alert-row"><td colspan="6" style="padding:0 0 6px 0"><div class="detail-panel" id="ship31"><strong>Action needed:</strong> No tracking update in 5 days. Escalate to DHL Germany. Customer has not yet contacted us.</div></td></tr>
       <tr>
-        <td><span style="font-family:var(--font-mono);font-size:12px">#1045</span></td>
+        <td class="mono">#1045</td>
         <td>Clara Dupont</td>
-        <td><button class="link-btn" onclick="openLink('https://www.dhl.com/fr-fr/home/tracking.html')">DHL <i class="ti ti-external-link" style="font-size:11px" aria-hidden="true"></i></button></td>
+        <td><a href="https://www.dhl.com/fr-fr/home/tracking.html" target="_blank" style="color:#1a6db5;font-size:13px">DHL <i class="ti ti-external-link" style="font-size:11px"></i></a></td>
         <td><span class="badge badge-info">Processing</span></td>
         <td>8 Jun 2026</td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <div style="margin-top:1rem;padding:12px;background:var(--color-background-warning);border-radius:var(--border-radius-md);font-size:13px;color:var(--color-text-warning)">
-    <i class="ti ti-bell" aria-hidden="true"></i> <strong>API note:</strong> Carrier links currently manual. Next step: connect DHL tracking API to auto-update status and flag overdue shipments automatically.
-  </div>
-</div>
+  <div class="note-box"><i class="ti ti-bell"></i> <strong>API note:</strong> Carrier links currently manual. Next step: connect DHL tracking API to auto-update status and flag overdue shipments automatically.</div>
 </div>
 
+</div><!-- /container -->
+
 <script>
-const supplierData = {
+const supplierData={
   lotus:{name:'Lotus Gems',type:'Jewelry manufacturer',contact:'Wei Zhang',email:'wei@lotusgems.cn',phone:'+86 755 8823 4401',country:'China',leadTime:'14 days',notes:'Main supplier for rings and earrings. Reliable. MOQ 5 units per SKU.',orders:[{id:'LG-221',date:'15 May 2026',items:'MM-RING-001 ×10, MM-EAR-004 ×10',total:'€480',status:'Delivered'},{id:'LG-198',date:'22 Apr 2026',items:'MM-EAR-004 ×10',total:'€180',status:'Delivered'},{id:'LG-175',date:'3 Mar 2026',items:'MM-RING-001 ×15',total:'€600',status:'Delivered'}]},
   starlight:{name:'Starlight Co.',type:'Jewelry manufacturer',contact:'Mei Lin',email:'orders@starlightco.hk',phone:'+852 2234 5678',country:'Hong Kong',leadTime:'21 days',notes:'Specialist in platinum. Premium quality, higher MOQ.',orders:[{id:'SC-44',date:'3 Apr 2026',items:'MM-NECK-007 ×5',total:'€750',status:'Delivered'},{id:'SC-39',date:'10 Jan 2026',items:'MM-NECK-007 ×5',total:'€750',status:'Delivered'}]},
   packpro:{name:'PackPro Spain',type:'Packaging',contact:'Carlos Ruiz',email:'carlos@packpro.es',phone:'+34 91 234 5678',country:'Spain',leadTime:'3–5 days',notes:'Local supplier. Fast turnaround. Bulk discounts over 100 units.',orders:[{id:'PP-12',date:'1 Mar 2026',items:'Gift box M ×100',total:'€120',status:'Delivered'},{id:'PP-09',date:'10 Jan 2026',items:'Gift box M ×100',total:'€120',status:'Delivered'}]}
 };
-const customerData = {
-  ana:{name:'Ana García',initials:'AG',color:'info',email:'ana.garcia@email.com',phone:'+34 612 345 678',city:'Madrid',orders:[{id:'#1042',date:'3 Jun 2026',product:'Solitaire ring 1ct 18K gold',amount:'€389',status:'In transit'},{id:'#0987',date:'14 Feb 2026',product:'Pendant necklace 1ct platinum',amount:'€299',status:'Delivered'},{id:'#0834',date:'1 Nov 2025',product:'Stud earrings 0.5ct silver',amount:'€159',status:'Delivered'}]},
-  james:{name:'James Wilson',initials:'JW',color:'success',email:'j.wilson@email.com',phone:'+44 7700 900123',city:'London',orders:[{id:'#1038',date:'29 May 2026',product:'Solitaire ring 1ct 18K gold',amount:'€299',status:'🔴 Delayed'}]}
+const customerData={
+  ana:{name:'Ana García',initials:'AG',avatarClass:'avatar-blue',email:'ana.garcia@email.com',phone:'+34 612 345 678',city:'Madrid',orders:[{id:'#1042',date:'3 Jun 2026',product:'Solitaire ring 1ct 18K gold',amount:'€389',status:'In transit',ok:true},{id:'#0987',date:'14 Feb 2026',product:'Pendant necklace 1ct platinum',amount:'€299',status:'Delivered',ok:true},{id:'#0834',date:'1 Nov 2025',product:'Stud earrings 0.5ct silver',amount:'€159',status:'Delivered',ok:true}]},
+  james:{name:'James Wilson',initials:'JW',avatarClass:'avatar-green',email:'j.wilson@email.com',phone:'+44 7700 900123',city:'London',orders:[{id:'#1038',date:'29 May 2026',product:'Solitaire ring 1ct 18K gold',amount:'€299',status:'🔴 Delayed',ok:false}]}
 };
 
-function showTab(id){
+function showTab(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  btn.classList.add('active');
 }
 function toggleDetail(id){
-  const el=document.getElementById(id);
-  el.classList.toggle('open');
+  document.getElementById(id).classList.toggle('open');
 }
-function openSupplier(id){showTab('suppliers');openSupplierCard(id);}
+function openSupplierById(id){
+  showTab('suppliers',document.querySelectorAll('.nav-btn')[1]);
+  openSupplierCard(id);
+}
 function openSupplierCard(id){
   const s=supplierData[id];
-  let rows=s.orders.map(o=>`<tr><td style="font-family:var(--font-mono);font-size:12px;padding:8px 8px 8px 0">${o.id}</td><td style="padding:8px 8px 8px 0">${o.date}</td><td style="padding:8px 8px 8px 0">${o.items}</td><td style="padding:8px 8px 8px 0;font-weight:500">${o.total}</td><td style="padding:8px 0"><span class="badge badge-ok">${o.status}</span></td></tr>`).join('');
+  const rows=s.orders.map(o=>`<tr><td class="mono" style="padding:8px 8px 8px 0">${o.id}</td><td style="padding:8px 8px 8px 0">${o.date}</td><td style="padding:8px 8px 8px 0">${o.items}</td><td style="padding:8px 8px 8px 0;font-weight:500">${o.total}</td><td style="padding:8px 0"><span class="badge badge-ok">${o.status}</span></td></tr>`).join('');
   document.getElementById('supplier-card-content').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
-      <div><div style="font-size:16px;font-weight:500">${s.name}</div><div style="font-size:13px;color:var(--color-text-secondary)">${s.type} · ${s.country}</div></div>
+      <div><div style="font-size:16px;font-weight:500">${s.name}</div><div style="font-size:13px;color:#aaa">${s.type} · ${s.country}</div></div>
       <span class="badge badge-ok">Active</span>
     </div>
-    <table style="margin-bottom:1rem">
-      <tr><td style="color:var(--color-text-secondary);padding:4px 12px 4px 0;width:120px"><i class="ti ti-user" style="font-size:14px;vertical-align:-2px;margin-right:4px" aria-hidden="true"></i>Contact</td><td style="padding:4px 0">${s.contact}</td></tr>
-      <tr><td style="color:var(--color-text-secondary);padding:4px 12px 4px 0"><i class="ti ti-mail" style="font-size:14px;vertical-align:-2px;margin-right:4px" aria-hidden="true"></i>Email</td><td style="padding:4px 0;color:var(--color-text-info)">${s.email}</td></tr>
-      <tr><td style="color:var(--color-text-secondary);padding:4px 12px 4px 0"><i class="ti ti-phone" style="font-size:14px;vertical-align:-2px;margin-right:4px" aria-hidden="true"></i>Phone</td><td style="padding:4px 0">${s.phone}</td></tr>
-      <tr><td style="color:var(--color-text-secondary);padding:4px 12px 4px 0"><i class="ti ti-clock" style="font-size:14px;vertical-align:-2px;margin-right:4px" aria-hidden="true"></i>Lead time</td><td style="padding:4px 0">${s.leadTime}</td></tr>
-    </table>
-    <div style="font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:8px 10px;border-radius:var(--border-radius-md);margin-bottom:1rem">${s.notes}</div>
-    <div style="font-size:13px;font-weight:500;margin-bottom:8px">Order history</div>
+    <div class="info-row"><span class="info-label"><i class="ti ti-user" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Contact</span><span>${s.contact}</span></div>
+    <div class="info-row"><span class="info-label"><i class="ti ti-mail" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Email</span><a href="mailto:${s.email}" style="color:#1a6db5">${s.email}</a></div>
+    <div class="info-row"><span class="info-label"><i class="ti ti-phone" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Phone</span><span>${s.phone}</span></div>
+    <div class="info-row" style="margin-bottom:12px"><span class="info-label"><i class="ti ti-clock" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Lead time</span><span>${s.leadTime}</span></div>
+    <div class="supplier-notes">${s.notes}</div>
+    <div class="order-history-title">Order history</div>
     <table><thead><tr><th>Ref</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>`;
   document.getElementById('supplier-list').style.display='none';
   document.getElementById('supplier-detail').style.display='block';
@@ -280,18 +292,16 @@ function closeSupplierCard(){
 }
 function openCustomer(id){
   const c=customerData[id];
-  let rows=c.orders.map(o=>`<tr><td style="font-family:var(--font-mono);font-size:12px;padding:8px 8px 8px 0">${o.id}</td><td style="padding:8px 8px 8px 0">${o.date}</td><td style="padding:8px 8px 8px 0">${o.product}</td><td style="padding:8px 8px 8px 0;font-weight:500">${o.amount}</td><td style="padding:8px 0"><span class="badge ${o.status.includes('🔴')?'badge-danger':'badge-ok'}">${o.status}</span></td></tr>`).join('');
+  const rows=c.orders.map(o=>`<tr><td class="mono" style="padding:8px 8px 8px 0">${o.id}</td><td style="padding:8px 8px 8px 0">${o.date}</td><td style="padding:8px 8px 8px 0">${o.product}</td><td style="padding:8px 8px 8px 0;font-weight:500">${o.amount}</td><td style="padding:8px 0"><span class="badge ${o.ok?'badge-ok':'badge-danger'}">${o.status}</span></td></tr>`).join('');
   document.getElementById('customer-card-content').innerHTML=`
     <div class="card">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
-        <div style="width:44px;height:44px;border-radius:50%;background:var(--color-background-${c.color});display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--color-text-${c.color})">${c.initials}</div>
-        <div><div style="font-weight:500;font-size:15px">${c.name}</div><div style="font-size:12px;color:var(--color-text-secondary)">${c.city}</div></div>
+        <div class="avatar ${c.avatarClass}">${c.initials}</div>
+        <div><div style="font-weight:500;font-size:15px">${c.name}</div><div style="font-size:12px;color:#aaa">${c.city}</div></div>
       </div>
-      <table style="margin-bottom:1rem">
-        <tr><td style="color:var(--color-text-secondary);padding:4px 12px 4px 0;width:80px"><i class="ti ti-mail" style="font-size:14px;vertical-align:-2px;margin-right:4px" aria-hidden="true"></i>Email</td><td style="padding:4px 0;color:var(--color-text-info)">${c.email}</td></tr>
-        <tr><td style="color:var(--color-text-secondary);padding:4px 12px 4px 0"><i class="ti ti-phone" style="font-size:14px;vertical-align:-2px;margin-right:4px" aria-hidden="true"></i>Phone</td><td style="padding:4px 0">${c.phone}</td></tr>
-      </table>
-      <div style="font-size:13px;font-weight:500;margin-bottom:8px">Order history</div>
+      <div class="info-row"><span class="info-label"><i class="ti ti-mail" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Email</span><a href="mailto:${c.email}" style="color:#1a6db5">${c.email}</a></div>
+      <div class="info-row" style="margin-bottom:1rem"><span class="info-label"><i class="ti ti-phone" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Phone</span><span>${c.phone}</span></div>
+      <div class="order-history-title">Order history</div>
       <table><thead><tr><th>Order</th><th>Date</th><th>Product</th><th>Amount</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>
     </div>`;
   document.getElementById('customer-list').style.display='none';
@@ -302,3 +312,5 @@ function closeCustomer(){
   document.getElementById('customer-detail').style.display='none';
 }
 </script>
+</body>
+</html>
